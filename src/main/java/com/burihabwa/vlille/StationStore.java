@@ -96,12 +96,18 @@ public class StationStore {
             lastUpdate = new GregorianCalendar();
             lastUpdate.setTimeInMillis(lastUpdate.getTimeInMillis() - lastupd);
         }
+        boolean creditCardTerminal = false;
+        NodeList crediCardTerminalList = document.getDocumentElement().getElementsByTagName("paiement");
+        if (crediCardTerminalList != null && crediCardTerminalList.getLength() > 0) {
+            creditCardTerminal = true;
+        }
 
         Station station = new Station();
         station.setAddress(address);
         station.setBikes(bikes);
         station.setEmptySockets(attachs);
         station.setLastUpdate(lastUpdate);
+        station.setCreditCardTerminal(creditCardTerminal);
 
         return station;
     }

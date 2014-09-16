@@ -10,6 +10,8 @@ import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by dorian on 9/16/14.
@@ -143,6 +145,39 @@ public class TestStationStore extends TestSuite {
         StationStore stationStore = new StationStore();
         Station station = stationStore.parse(data);
         Assert.assertNull(station.getLastUpdate());
+    }
+
+    @Test
+    public void testParseMissingPaiement() throws IOException, SAXException, ParserConfigurationException {
+        String data = "<station>\n" +
+                "  <adress>ANGLE PLACE RIHOUR RUE JEAN ROISIN </adress>\n" +
+                "  <status>0</status>\n" +
+                "  <bikes>0</bikes>\n" +
+                "  <attachs>32</attachs>\n" +
+                "  <lastupd>2 secondes</lastupd>\n" +
+                "</station>";
+        StationStore stationStore = new StationStore();
+        Station station = stationStore.parse(data);
+        Assert.assertFalse(station.hasCreditCardTerminal());
+    }
+
+    @Test
+    public void testParseNormalXML() throws IOException, SAXException, ParserConfigurationException {
+        String data = "<station>\n" +
+                "  <adress>ANGLE PLACE RIHOUR RUE JEAN ROISIN </adress>\n" +
+                "  <status>0</status>\n" +
+                "  <bikes>1</bikes>\n" +
+                "  <attachs>31</attachs>\n" +
+                "  <paiement>AVEC_TPE</paiement>\n" +
+                "  <lastupd>0 secondes</lastupd>\n" +
+                "</station>";
+        Calendar calendar = new GregorianCalendar();
+        StationStore stationStore = new StationStore();
+        Station station = stationStore.parse(data);
+        Assert.assertTrue(station.hasCreditCardTerminal());
+        Assert.assertEquals(station.getAddress(), "ANGLE PLACE RIHOUR RUE JEAN ROISIN ");
+        Assert.assertEquals(station.getEmptySockets(), 31);
+        Assert.assertEquals(station.getBikes(), 1);
     }
 
 }
