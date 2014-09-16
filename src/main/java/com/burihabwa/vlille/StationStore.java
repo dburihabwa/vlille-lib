@@ -1,7 +1,6 @@
 package com.burihabwa.vlille;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,7 +12,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -25,6 +23,9 @@ public class StationStore {
     private static final String BASE_URL = "http://vlille.fr/stations/xml-station.aspx?borne=";
 
     public Station getStation(final int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("id argument cannot be lower or equal to 0 (id = " + id + ")");
+        }
         Station station = null;
         URL url = null;
         HttpURLConnection connection = null;
@@ -39,7 +40,6 @@ public class StationStore {
             is.read(buffer);
             String data = new String(buffer);
             is.close();
-            //System.out.println(data);
             station = parse(data);
         } catch (MalformedURLException e) {
             e.printStackTrace();
