@@ -6,10 +6,10 @@ import java.util.Calendar;
  * Created by dorian on 9/15/14.
  */
 public class Station {
-    private int id;
+    private int id = 0;
     private String address;
-    private int bikes;
-    private int emptySockets;
+    private int bikes = 0;
+    private int emptySockets = 0;
     private Calendar lastUpdate;
     private boolean creditCardTerminal;
 
@@ -17,6 +17,7 @@ public class Station {
     }
 
     public Station(int id, String address, int bikes, int emptySockets, Calendar lastUpdate, boolean creditCardTerminal) {
+        super();
         this.id = id;
         this.address = address;
         this.bikes = bikes;

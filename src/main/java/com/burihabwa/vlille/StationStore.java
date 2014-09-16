@@ -1,6 +1,7 @@
 package com.burihabwa.vlille;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -63,19 +64,38 @@ public class StationStore {
     }
 
     public Station parse(final String data) throws ParserConfigurationException, IOException, SAXException {
+        if (data == null) {
+            throw new IllegalArgumentException("data argument cannot be null!");
+        }
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = dbFactory.newDocumentBuilder();
         InputStream is = new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_16));
         Document document = documentBuilder.parse(is);
         is.close();
 
-        String address = document.getDocumentElement().getElementsByTagName("adress").item(0).getTextContent();
-        int bikes = Integer.parseInt(document.getDocumentElement().getElementsByTagName("bikes").item(0).getTextContent(), 10);
-        int attachs = Integer.parseInt(document.getDocumentElement().getElementsByTagName("attachs").item(0).getTextContent(), 10);
-        long lastupd = Long.parseLong(document.getDocumentElement().getElementsByTagName("lastupd").item(0).getTextContent().split("\\s")[0], 10) * 1000;
-
-        Calendar lastUpdate = new GregorianCalendar();
-        lastUpdate.setTimeInMillis(lastUpdate.getTimeInMillis() - lastupd);
+        NodeList addressNodes = document.getDocumentElement().getElementsByTagName("adress");
+        String address = null;
+        if (addressNodes != null &&  addressNodes.getLength() > 0) {
+            address = addressNodes.item(0).getTextContent();
+        }
+        NodeList bikesList = document.getDocumentElement().getElementsByTagName("bikes");
+        int bikes = 0;
+        if (bikesList != null &&  bikesList.getLength() > 0) {
+            bikes = Integer.parseInt(bikesList.item(0).getTextContent(), 10);
+        }
+        int attachs = 0;
+        NodeList attachsList = document.getDocumentElement().getElementsByTagName("attachs");
+        if (attachsList != null && attachsList.getLength() > 0) {
+            attachs = Integer.parseInt(attachsList.item(0).getTextContent(), 10);
+        }
+        long lastupd = 0L;
+        NodeList lastUpdateList = document.getDocumentElement().getElementsByTagName("lastupd");
+        Calendar lastUpdate = null;
+        if (lastUpdateList != null && lastUpdateList.getLength() > 0) {
+            lastupd = Long.parseLong(document.getDocumentElement().getElementsByTagName("lastupd").item(0).getTextContent().split("\\s")[0], 10) * 1000;
+            lastUpdate = new GregorianCalendar();
+            lastUpdate.setTimeInMillis(lastUpdate.getTimeInMillis() - lastupd);
+        }
 
         Station station = new Station();
         station.setAddress(address);
