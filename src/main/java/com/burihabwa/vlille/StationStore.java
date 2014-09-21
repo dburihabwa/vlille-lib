@@ -18,11 +18,17 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Created by dorian on 9/15/14.
+ * Station store that retrieves {@link com.burihabwa.vlille.Station} information from the vlille website.
  */
 public class StationStore {
     private static final String BASE_URL = "http://vlille.fr/stations/xml-station.aspx?borne=";
 
+    /**
+     * Returns a station state.
+     *
+     * @param id The id of the station.
+     * @return A station
+     */
     public Station getStation(final int id) {
         if (id <= 0) {
             throw new IllegalArgumentException("id argument cannot be lower or equal to 0 (id = " + id + ")");
@@ -63,6 +69,15 @@ public class StationStore {
         return station;
     }
 
+    /**
+     * Parses XML data and retrieves a {@link com.burihabwa.vlille.Station} state.
+     *
+     * @param data An XML document
+     * @return a {@link com.burihabwa.vlille.Station} state
+     * @throws ParserConfigurationException If XML parser is not set properly
+     * @throws IOException                  If the data cannot be read properly
+     * @throws SAXException                 If data is not a valid XML Document
+     */
     public Station parse(final String data) throws ParserConfigurationException, IOException, SAXException {
         if (data == null) {
             throw new IllegalArgumentException("data argument cannot be null!");
@@ -75,12 +90,12 @@ public class StationStore {
 
         NodeList addressNodes = document.getDocumentElement().getElementsByTagName("adress");
         String address = null;
-        if (addressNodes != null &&  addressNodes.getLength() > 0) {
+        if (addressNodes != null && addressNodes.getLength() > 0) {
             address = addressNodes.item(0).getTextContent();
         }
         NodeList bikesList = document.getDocumentElement().getElementsByTagName("bikes");
         int bikes = 0;
-        if (bikesList != null &&  bikesList.getLength() > 0) {
+        if (bikesList != null && bikesList.getLength() > 0) {
             bikes = Integer.parseInt(bikesList.item(0).getTextContent(), 10);
         }
         int attachs = 0;
@@ -105,7 +120,7 @@ public class StationStore {
         Station station = new Station();
         station.setAddress(address);
         station.setBikes(bikes);
-        station.setEmptySockets(attachs);
+        station.setFreeSockets(attachs);
         station.setLastUpdate(lastUpdate);
         station.setCreditCardTerminal(creditCardTerminal);
 

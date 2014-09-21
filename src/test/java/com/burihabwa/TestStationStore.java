@@ -130,7 +130,7 @@ public class TestStationStore extends TestSuite {
                 "</station>";
         StationStore stationStore = new StationStore();
         Station station = stationStore.parse(data);
-        Assert.assertEquals(station.getEmptySockets(), 0);
+        Assert.assertEquals(station.getFreeSockets(), 0);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class TestStationStore extends TestSuite {
         Station station = stationStore.parse(data);
         Assert.assertTrue(station.hasCreditCardTerminal());
         Assert.assertEquals(station.getAddress(), "ANGLE PLACE RIHOUR RUE JEAN ROISIN ");
-        Assert.assertEquals(station.getEmptySockets(), 31);
+        Assert.assertEquals(station.getFreeSockets(), 31);
         Assert.assertEquals(station.getBikes(), 1);
     }
 
