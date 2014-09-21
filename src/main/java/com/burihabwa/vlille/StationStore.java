@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -84,7 +83,7 @@ public class StationStore {
         }
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = dbFactory.newDocumentBuilder();
-        InputStream is = new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_16));
+        InputStream is = new ByteArrayInputStream(data.getBytes("UTF-16"));
         Document document = documentBuilder.parse(is);
         is.close();
 
