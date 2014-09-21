@@ -6,5 +6,5 @@ Can be used to recover :
 ## Build
 
 ```bash
-mvn compile
+mvn package
 ```
