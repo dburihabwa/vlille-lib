@@ -7,7 +7,10 @@ import java.util.Calendar;
  */
 public class Station {
     private int id = 0;
+    private String name;
     private String address;
+    private double longitude;
+    private double latitude;
     private int bikes = 0;
     private int freeSockets = 0;
     private Calendar lastUpdate;
@@ -26,10 +29,13 @@ public class Station {
      * @param lastUpdate         the last time the station information was updated
      * @param creditCardTerminal whether the station has credit card terminal or not
      */
-    public Station(int id, String address, int bikes, int freeSockets, Calendar lastUpdate, boolean creditCardTerminal) {
+    public Station(int id, String name, String address, double longitude, double latitude, int bikes, int freeSockets, Calendar lastUpdate, boolean creditCardTerminal) {
         super();
         this.id = id;
+        this.name = name;
         this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.bikes = bikes;
         this.freeSockets = freeSockets;
         this.lastUpdate = lastUpdate;
@@ -54,6 +60,14 @@ public class Station {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     /**
      * Returns the address of the station
      *
@@ -61,6 +75,22 @@ public class Station {
      */
     public String getAddress() {
         return address;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     /**
@@ -142,5 +172,22 @@ public class Station {
      */
     public void setCreditCardTerminal(boolean creditCardTerminal) {
         this.creditCardTerminal = creditCardTerminal;
+    }
+
+    @Override
+    public String toString() {
+        String str = "(";
+        str += "id = " + id + ", ";
+        if (name != null) {
+            str += "name = " + name + ", ";
+        }
+        if (address != null) {
+            str += "address = " + address + ", ";
+        }
+        str += "bikes = " + bikes + ", ";
+        str += "freeSockets = " + freeSockets + ", ";
+        str += "credit card terminal = " + creditCardTerminal;
+        str += ")";
+        return str;
     }
 }

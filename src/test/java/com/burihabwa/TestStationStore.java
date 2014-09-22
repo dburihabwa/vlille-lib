@@ -66,7 +66,8 @@ public class TestStationStore extends TestSuite {
         String data = null;
         StationStore stationStore = new StationStore();
         try {
-            stationStore.parse(data);
+            Station station = null;
+            stationStore.parse(data, station);
             Assert.fail("Should not have reached this line!");
         } catch (IllegalArgumentException e) {
             Assert.assertTrue(true);
@@ -81,7 +82,8 @@ public class TestStationStore extends TestSuite {
         String data = "";
         StationStore stationStore = new StationStore();
         try {
-            stationStore.parse(data);
+            Station station = null;
+            stationStore.parse(data, station);
             Assert.fail("Should not have reached this line!");
         } catch (SAXParseException e) {
             Assert.assertTrue(true);
@@ -99,7 +101,8 @@ public class TestStationStore extends TestSuite {
                 "  <lastupd>32 secondes</lastupd>" +
                 "</station>";
         StationStore stationStore = new StationStore();
-        Station station = stationStore.parse(data);
+        Station station = new Station();
+        station = stationStore.parse(data, station);
         Assert.assertNull(station.getAddress());
     }
 
@@ -114,7 +117,8 @@ public class TestStationStore extends TestSuite {
                 "  <lastupd>13 secondes</lastupd>\n" +
                 "</station>";
         StationStore stationStore = new StationStore();
-        Station station = stationStore.parse(data);
+        Station station = new Station();
+        station = stationStore.parse(data, station);
         Assert.assertEquals(station.getBikes(), 0);
     }
 
@@ -129,7 +133,8 @@ public class TestStationStore extends TestSuite {
                 "  <lastupd>13 secondes</lastupd>\n" +
                 "</station>";
         StationStore stationStore = new StationStore();
-        Station station = stationStore.parse(data);
+        Station station = new Station();
+        station = stationStore.parse(data, station);
         Assert.assertEquals(station.getFreeSockets(), 0);
     }
 
@@ -143,7 +148,8 @@ public class TestStationStore extends TestSuite {
                 "  <paiement>AVEC_TPE</paiement>\n" +
                 "</station>";
         StationStore stationStore = new StationStore();
-        Station station = stationStore.parse(data);
+        Station station = new Station();
+        station = stationStore.parse(data, station);
         Assert.assertNull(station.getLastUpdate());
     }
 
@@ -157,7 +163,8 @@ public class TestStationStore extends TestSuite {
                 "  <lastupd>2 secondes</lastupd>\n" +
                 "</station>";
         StationStore stationStore = new StationStore();
-        Station station = stationStore.parse(data);
+        Station station = new Station();
+        station = stationStore.parse(data, station);
         Assert.assertFalse(station.hasCreditCardTerminal());
     }
 
@@ -173,7 +180,8 @@ public class TestStationStore extends TestSuite {
                 "</station>";
         Calendar calendar = new GregorianCalendar();
         StationStore stationStore = new StationStore();
-        Station station = stationStore.parse(data);
+        Station station = new Station();
+        station = stationStore.parse(data, station);
         Assert.assertTrue(station.hasCreditCardTerminal());
         Assert.assertEquals(station.getAddress(), "ANGLE PLACE RIHOUR RUE JEAN ROISIN ");
         Assert.assertEquals(station.getFreeSockets(), 31);
