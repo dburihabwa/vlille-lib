@@ -51,7 +51,6 @@ public class StationStore {
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
-            System.out.println("data : " + data);
             e.printStackTrace();
         } finally {
             if (connection != null) {
@@ -69,17 +68,11 @@ public class StationStore {
         InputStream is = new ByteArrayInputStream(data.getBytes("UTF-16"));
         Document document = documentBuilder.parse(is);
 
-        NodeList markersNodes = document.getDocumentElement().getElementsByTagName("marker");
-        if (markersNodes == null) {
-            System.out.println("No markers in XML document");
-        } else {
-            System.out.println(markersNodes.getLength() + " markers node");
-        }
-
-        if (markersNodes != null && markersNodes.getLength() >= 1) {
-            for (int i = 0; i < markersNodes.getLength(); i++) {
-                Node node = markersNodes.item(i);
-                NamedNodeMap attributes = node.getAttributes();
+        NodeList markerNodes = document.getDocumentElement().getElementsByTagName("marker");
+        if (markerNodes != null && markerNodes.getLength() >= 1) {
+            for (int i = 0; i < markerNodes.getLength(); i++) {
+                Node marker = markerNodes.item(i);
+                NamedNodeMap attributes = marker.getAttributes();
 
                 int id = Integer.parseInt(attributes.getNamedItem("id").getNodeValue(), 10);
                 String name = attributes.getNamedItem("name").getNodeValue();
@@ -129,9 +122,11 @@ public class StationStore {
             connection.setRequestMethod("GET");
             connection.connect();
             is = connection.getInputStream();
-            byte[] buffer = new byte[is.available()];
-            is.read(buffer);
-            data = new String(buffer);
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) > 0) {
+                data += new String(buffer, 0, bytesRead);
+            }
             station = parse(data, station);
             is.close();
         } catch (MalformedURLException e) {
@@ -144,7 +139,6 @@ public class StationStore {
             e.printStackTrace();
             return station;
         } catch (SAXException e) {
-            System.out.println("data : " + data);
             e.printStackTrace();
             return station;
         } finally {
