@@ -1,11 +1,13 @@
 package com.burihabwa.vlille;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  * Vlille station that holds bikes and provides docking sockets for vlille users.
  */
-public class Station {
+public class Station implements Serializable {
+    private long serialVersionUID = 1L;
     private int id = 0;
     private String name;
     private String address;
