@@ -146,6 +146,7 @@ public class StationStore {
                 connection.disconnect();
             }
         }
+        stationsById.put(station.getId(), station);
         return station;
     }
 
