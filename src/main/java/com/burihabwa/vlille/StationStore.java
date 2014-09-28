@@ -24,6 +24,9 @@ public class StationStore {
     private static final String ALL_STATIONS_URL = "http://vlille.fr/stations/xml-stations.aspx";
     private static final String STATION_URL = "http://vlille.fr/stations/xml-station.aspx?borne=";
 
+    private static final String SANS_TPE = "SANS_TPE";
+    private static final String AVEC_TPE = "AVEC_TPE";
+
     private Map<Integer, Station> stationsById = new TreeMap<Integer, Station>();
 
     public StationStore() {
@@ -192,9 +195,12 @@ public class StationStore {
             lastUpdate.setTimeInMillis(lastUpdate.getTimeInMillis() - lastupd);
         }
         boolean creditCardTerminal = false;
-        NodeList crediCardTerminalList = document.getDocumentElement().getElementsByTagName("paiement");
-        if (crediCardTerminalList != null && crediCardTerminalList.getLength() > 0) {
-            creditCardTerminal = true;
+        NodeList creditCardTerminalList = document.getDocumentElement().getElementsByTagName("paiement");
+        if (creditCardTerminalList != null && creditCardTerminalList.getLength() > 0) {
+            String value = creditCardTerminalList.item(0).getTextContent();
+            if (value.equals(StationStore.AVEC_TPE)) {
+                creditCardTerminal = true;
+            }
         }
 
         station.setAddress(address);
